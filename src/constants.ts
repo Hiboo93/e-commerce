@@ -3,7 +3,7 @@ export const NAVLINKS = [
   {title : "Contact", href : "/contact"},
 ]
 export const NAVLINKSADMIN = [
-  {title : "Products", href : "/products"},
+  {title : "Products", href : "/admin/products"},
   {title : "Profile", href : "/profile"},
   {title : "Logout", href : "/logout"},
 ]
