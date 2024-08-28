@@ -1,3 +1,6 @@
+import { Link } from "react-router-dom";
+import { NAVLINKS, NAVLINKSADMIN } from "../../constants.ts";
+
 const Navbar = () => {
   return (
     <div className="navbar bg-base-100">
@@ -23,24 +26,22 @@ const Navbar = () => {
             tabIndex={0}
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
           >
-            <li>
-              <a>Home</a>
-            </li>
-            <li>
-              <a>Contact</a>
-            </li>
+            {NAVLINKS.map((link, index) => (
+              <li key={index}>
+                <Link to={link.href}>{link.title}</Link>
+              </li>
+            ))}
           </ul>
         </div>
-        <a className="btn btn-ghost text-xl">Best Store</a>
+        <Link to="/" className="btn btn-ghost text-xl">Best Store</Link>
       </div>
       <div className="navbar-center hidden md:flex">
         <ul className="menu menu-horizontal px-1">
-          <li>
-            <a>Home</a>
-          </li>
-          <li>
-            <a>Contact</a>
-          </li>
+          {NAVLINKS.map((link, index) => (
+            <li key={index}>
+              <Link to={link.href}>{link.title}</Link>
+            </li>
+          ))}
         </ul>
       </div>
       <div className="navbar-end">
@@ -49,15 +50,11 @@ const Navbar = () => {
             <details>
               <summary>Admin</summary>
               <ul className="bg-base-100 rounded-t-none p-2">
-                <li>
-                  <a>Products</a>
-                </li>
-                <li>
-                  <a>Profile</a>
-                </li>
-                <li>
-                  <a>Logout</a>
-                </li>
+                {NAVLINKSADMIN.map((link, index) => (
+                  <li key={index}>
+                    <Link to={link.href}>{link.title}</Link>
+                  </li>
+                ))}
               </ul>
             </details>
           </li>
