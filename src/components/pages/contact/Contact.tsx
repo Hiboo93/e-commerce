@@ -1,7 +1,7 @@
 
 function Contact() {
   return (
-    <div className="my-4 p-4">
+    <div className="container mx-auto my-4 p-4">
       <h2 className="text-3xl font-bold ">
         Page Contact
       </h2>
