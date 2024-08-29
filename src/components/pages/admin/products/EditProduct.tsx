@@ -2,30 +2,29 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { ValidationErrorsType } from "../../../../types.ts";
 
-
 function EditProduct() {
-  const { id } = useParams<{ id: string }>()
+  const { id } = useParams<{ id: string }>();
 
-  const [ initialData, setInitialData ] = useState()
-  const [validationErrors, setValidationErrors] = useState<ValidationErrorsType>({});
+  const [initialData, setInitialData] = useState();
+  const [validationErrors, setValidationErrors] =
+    useState<ValidationErrorsType>({});
   const navigate = useNavigate();
 
   async function getProduct() {
     try {
       const response = await fetch(`http://localhost:4000/products/${id}`);
-      const data = await response.json()
+      const data = await response.json();
       if (response.ok) {
-        setInitialData(data)
+        setInitialData(data);
       }
     } catch (error) {
-      alert("Unable to read the product details")
+      alert("Unable to read the product details");
     }
   }
 
   useEffect(() => {
-    getProduct()
-  }, [])
-  
+    getProduct();
+  }, []);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -85,132 +84,134 @@ function EditProduct() {
             </label>
           </div>
 
-
-          {
-            initialData &&
-          <form action="" onSubmit={handleSubmit}>
-            <div className="grid grid-rows-1 mb-3 gap-y-3">
-              <div>
-                <label className="input input-bordered flex items-center gap-2">
-                  Name
-                  <input
-                    type="text"
-                    className="grow"
-                    placeholder=""
-                    name="name"
-                    defaultValue={initialData.name}
-                    required
-                  />
-                  <span className="text-error">{validationErrors.name}</span>
-                </label>
-              </div>
-
-              <div>
-                <label className="input input-bordered flex items-center gap-2">
-                  Brand
-                  <input
-                    type="text"
-                    className="grow"
-                    placeholder=""
-                    name="brand"
-                    required
-                  />
-                  <span className="text-error">{validationErrors.brand}</span>
-                </label>
-              </div>
-
-              <div>
-                <select
-                  className="select select-bordered w-full max-w-xs"
-                  name="category"
-                  defaultValue={initialData.category}
-                >
-                  <option disabled selected>
-                    Category
-                  </option>
-                  <option value={"Other"}>Other</option>
-                  <option value={"Phones"}>Phones</option>
-                  <option value={"Computer"}>Computer</option>
-                  <option value={"Accessories"}>Accessories</option>
-                  <option value={"Printers"}>Printers</option>
-                  <option value={"Cameras"}>Cameras</option>
-                </select>
-                <span className="text-error">{validationErrors.category}</span>
-              </div>
-
-              <div>
-                <label className="input input-bordered flex items-center gap-2">
-                  Price
-                  <input
-                    type="number"
-                    className="grow"
-                    placeholder=""
-                    name="price"
-                    step={0.01}
-                    min={1}
-                    defaultValue={initialData.price}
-                    required
-                  />
-                  <span className="text-error">{validationErrors.price}</span>
-                </label>
-              </div>
-
-              <div>
-                <textarea
-                  className="textarea textarea-bordered"
-                  placeholder="Description"
-                  name="description"
-                  defaultValue={initialData.description}
-                ></textarea>
-                <span className="text-error">
-                  {validationErrors.description}
-                </span>
-              </div>
-
-              <div>
-                <img
-                  src={"http://localhost:4000/image/" + initialData.imageFilename}
-                  alt="..."
-                  width="150"
-                />
-              </div>
-
-              <div>
-                <input
-                  type="file"
-                  className="file-input file-input-bordered w-full max-w-xs"
-                  name="image"
-                />
-                <span className="text-error">{validationErrors.image}</span>
-              </div>
-
-              <div>
-                <input
-                  className="file-input file-input-bordered w-full max-w-xs"
-                  readOnly
-                  defaultValue={initialData.createdAt.slice(0, 10)}
-                />
-              </div>
-
-              <div className="flex gap-x-2">
+          {initialData && (
+            <form action="" onSubmit={handleSubmit}>
+              <div className="grid grid-rows-1 mb-3 gap-y-3">
                 <div>
-                  <button className="btn btn-primary" type="submit">
-                    Submit
-                  </button>
+                  <label className="input input-bordered flex items-center gap-2">
+                    Name
+                    <input
+                      type="text"
+                      className="grow"
+                      placeholder=""
+                      name="name"
+                      defaultValue={initialData.name}
+                      required
+                    />
+                    <span className="text-error">{validationErrors.name}</span>
+                  </label>
                 </div>
+
                 <div>
-                  <Link
-                    className="btn btn-secondary"
-                    to={"/admin/products"}
-                    role="button"
+                  <label className="input input-bordered flex items-center gap-2">
+                    Brand
+                    <input
+                      type="text"
+                      className="grow"
+                      placeholder=""
+                      name="brand"
+                      required
+                    />
+                    <span className="text-error">{validationErrors.brand}</span>
+                  </label>
+                </div>
+
+                <div>
+                  <select
+                    className="select select-bordered w-full max-w-xs"
+                    name="category"
+                    defaultValue={initialData.category}
                   >
-                    Cancel
-                  </Link>
+                    <option disabled selected>
+                      Category
+                    </option>
+                    <option value={"Other"}>Other</option>
+                    <option value={"Phones"}>Phones</option>
+                    <option value={"Computer"}>Computer</option>
+                    <option value={"Accessories"}>Accessories</option>
+                    <option value={"Printers"}>Printers</option>
+                    <option value={"Cameras"}>Cameras</option>
+                  </select>
+                  <span className="text-error">
+                    {validationErrors.category}
+                  </span>
+                </div>
+
+                <div>
+                  <label className="input input-bordered flex items-center gap-2">
+                    Price
+                    <input
+                      type="number"
+                      className="grow"
+                      placeholder=""
+                      name="price"
+                      step={0.01}
+                      min={1}
+                      defaultValue={initialData.price}
+                      required
+                    />
+                    <span className="text-error">{validationErrors.price}</span>
+                  </label>
+                </div>
+
+                <div>
+                  <textarea
+                    className="textarea textarea-bordered"
+                    placeholder="Description"
+                    name="description"
+                    defaultValue={initialData.description}
+                  ></textarea>
+                  <span className="text-error">
+                    {validationErrors.description}
+                  </span>
+                </div>
+
+                <div>
+                  <img
+                    src={
+                      "http://localhost:4000/image/" + initialData.imageFilename
+                    }
+                    alt="..."
+                    width="150"
+                  />
+                </div>
+
+                <div>
+                  <input
+                    type="file"
+                    className="file-input file-input-bordered w-full max-w-xs"
+                    name="image"
+                  />
+                  <span className="text-error">{validationErrors.image}</span>
+                </div>
+
+                <div>
+                  <input
+                    className="file-input file-input-bordered w-full max-w-xs"
+                    readOnly
+                    defaultValue={initialData.createdAt.slice(0, 10)}
+                  />
+                </div>
+
+                <div className="flex gap-x-2">
+                  <div>
+                    <button className="btn btn-primary" type="submit">
+                      Submit
+                    </button>
+                  </div>
+                  <div>
+                    <Link
+                      className="btn btn-secondary"
+                      to={"/admin/products"}
+                      role="button"
+                    >
+                      Cancel
+                    </Link>
+                  </div>
                 </div>
               </div>
-            </div>
-          </form>
-          }
+            </form>
+          )}
         </div>
       </div>
     </div>
