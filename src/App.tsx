@@ -5,6 +5,8 @@ import Home from "./components/pages/home/Home.tsx"
 import Contact from "./components/pages/contact/Contact.tsx"
 import ErrorPage from "./components/pages/not-found/ErrorPage.tsx"
 import ProductList from "./components/pages/admin/products/ProductList.tsx"
+import CreateProduct from "./components/pages/admin/products/CreateProduct.tsx"
+import EditProduct from "./components/pages/admin/products/EditProduct.tsx"
 
 function App() {
 
@@ -16,6 +18,8 @@ function App() {
           <Route path="/" element={<Home/>}/>
           <Route path="/contact" element={<Contact/>}/>
           <Route path="/admin/products" element={<ProductList/>}/>
+          <Route path="/admin/products/create" element={<CreateProduct/>}/>
+          <Route path="/admin/products/edit/:id" element={<EditProduct/>}/>
           <Route path="*" element={<ErrorPage/>}/>
         </Routes>
         <Footer/>

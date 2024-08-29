@@ -19,6 +19,20 @@ function ProductList() {
     getProducts()
    }, [])
 
+   const handleDelete = async (id: ProductsType) => { 
+    try {
+      const response =  await fetch(`http://localhost:4000/products/${id}`, {
+        method: "DELETE",
+      })
+    if (response.ok) {
+      getProducts()
+    }
+    } catch (error) {
+      alert("Unable to delete the product")
+    }
+
+    }
+
   return (
     <div className="container my-4">
       <h2 className="text-center mb-4 text-3xl">Products</h2>
@@ -65,12 +79,12 @@ function ProductList() {
                     <td>{product.name}</td>
                     <td>{product.brand}</td>
                     <td>{product.category}</td>
-                    <td>{product.price}</td>
+                    <td>{product.price}$</td>
                     <td><img src={`http://localhost:4000/images/${product.imageFilename}`} width={100} alt="produit" /></td>
                     <td>{product.createdAt.slice(0,10)}</td>
                     <td>
                       <Link className="btn btn-primary mx-2" to={`/admin/products/edit/${product.id}`}>Edit</Link>
-                      <button type="button" className="btn btn-normal btn-error">Delete</button>
+                      <button type="button" className="btn btn-normal btn-error" onClick={() => handleDelete(product.id)}>Delete</button>
                     </td>
                   </tr>
                 ))
