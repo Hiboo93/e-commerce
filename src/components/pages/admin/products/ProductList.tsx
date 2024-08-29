@@ -5,13 +5,16 @@ import { ProductsType } from "../../../../types.ts";
 function ProductList() {
   const [products, setProducts] = useState<ProductsType[]>([]);
 
+   // search functionality
+   const [ search, setSearch ] = useState("")
+
   // pagination functionality
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 5;
 
   const getProducts = async () => {
-    let url = `http://localhost:4000/products?_sort=id&_order=desc&_page=${currentPage}&_limit=${pageSize}`;
+    let url = `http://localhost:4000/products?_sort=id&_order=desc&_page=${currentPage}&_limit=${pageSize}&q=${search}`;
 
     try {
       let response = await fetch(url);
@@ -30,7 +33,7 @@ function ProductList() {
 
   useEffect(() => {
     getProducts();
-  }, [currentPage]);
+  }, [currentPage, search]);
 
   const handleDelete = async (id: ProductsType) => {
     try {
@@ -44,6 +47,8 @@ function ProductList() {
       alert("Unable to delete the product");
     }
   };
+
+ 
 
   // pagination functionality
   let paginationButtons = [];
@@ -59,6 +64,15 @@ function ProductList() {
         }}>{i}</Link>
     );
   }
+
+  const handleSearch = (event: React.FormEvent<HTMLFormElement>) => { 
+    event.preventDefault()
+
+    const searchElement = event.target as HTMLFormElement;
+    let text = searchElement.search.value
+    setSearch(text)
+    setCurrentPage(1)
+   }
 
   return (
     <div className="container my-4">
@@ -81,10 +95,17 @@ function ProductList() {
             Refresh
           </button>
         </div>
-        <div className="grid col-auto"></div>
+        <div className="my-6 mx-4">
+          <form onSubmit={handleSearch} >
+            <div className="form-control">
+              <input name="search" type="text" placeholder="Search" className="input input-bordered w-64 md:w-96" />
+              <button className="btn btn-accent my-3 w-24">Validate</button>
+            </div>
+          </form>
+        </div>
       </div>
 
-      <div className="overflow-x-auto mx-4">
+      <div className="overflow-x-auto mx-4 container">
         <table className="table">
           {/* head */}
           <thead>
@@ -135,7 +156,6 @@ function ProductList() {
             ))}
           </tbody>
         </table>
-
         <div className="join">{paginationButtons}</div>
       </div>
     </div>
