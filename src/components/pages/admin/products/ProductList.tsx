@@ -3,35 +3,62 @@ import { Link } from "react-router-dom";
 import { ProductsType } from "../../../../types.ts";
 
 function ProductList() {
-  const [ products, setProducts ] = useState<ProductsType[]>([])
+  const [products, setProducts] = useState<ProductsType[]>([]);
 
-  const getProducts = async () => { 
+  // pagination functionality
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const pageSize = 5;
+
+  const getProducts = async () => {
+    let url = `http://localhost:4000/products?_sort=id&_order=desc&_page=${currentPage}&_limit=${pageSize}`;
+
     try {
-      let response = await fetch("http://localhost:4000/products?_sort=user,views&_order=desc,asc")
-      let productsData = await response.json()
-      setProducts(productsData)
+      let response = await fetch(url);
+      let productsData = await response.json();
+      if (response.ok) {
+        let totalCount = response.headers.get("X-Total-Count");
+        let pages: number | null = Math.ceil(totalCount / pageSize);
+        // console.log("Total Pages:" + pages);
+        setTotalPages(pages);
+        setProducts(productsData);
+      }
     } catch (error) {
-      alert("Unable to get the data")
+      alert("Unable to get the data");
     }
-   }
+  };
 
-   useEffect(() => {
-    getProducts()
-   }, [])
+  useEffect(() => {
+    getProducts();
+  }, [currentPage]);
 
-   const handleDelete = async (id: ProductsType) => { 
+  const handleDelete = async (id: ProductsType) => {
     try {
-      const response =  await fetch(`http://localhost:4000/products/${id}`, {
+      const response = await fetch(`http://localhost:4000/products/${id}`, {
         method: "DELETE",
-      })
-    if (response.ok) {
-      getProducts()
-    }
+      });
+      if (response.ok) {
+        getProducts();
+      }
     } catch (error) {
-      alert("Unable to delete the product")
+      alert("Unable to delete the product");
     }
+  };
 
-    }
+  // pagination functionality
+  let paginationButtons = [];
+  for (let i = 1; i <= totalPages; i++) {
+    paginationButtons.push(
+        <Link className={
+          i === currentPage ? "join-item btn btn-active" : "join-item btn"
+        }
+        key={i} to={`?page=${i}`} onClick={event => {
+          event.preventDefault()
+
+          setCurrentPage(i)
+        }}>{i}</Link>
+    );
+  }
 
   return (
     <div className="container my-4">
@@ -46,13 +73,15 @@ function ProductList() {
           >
             Create Product
           </Link>
-          <button className="btn btn-outline btn-primary" type="button" onClick={getProducts}>
+          <button
+            className="btn btn-outline btn-primary"
+            type="button"
+            onClick={getProducts}
+          >
             Refresh
           </button>
         </div>
-        <div className="grid col-auto">
-
-        </div>
+        <div className="grid col-auto"></div>
       </div>
 
       <div className="overflow-x-auto mx-4">
@@ -72,25 +101,42 @@ function ProductList() {
           </thead>
           <tbody>
             {/* row 1 */}
-              {
-                products.map((product, index) => (
-                  <tr key={index} className="">
-                    <th>{product.id}</th>
-                    <td>{product.name}</td>
-                    <td>{product.brand}</td>
-                    <td>{product.category}</td>
-                    <td>{product.price}$</td>
-                    <td><img src={`http://localhost:4000/images/${product.imageFilename}`} width={100} alt="produit" /></td>
-                    <td>{product.createdAt.slice(0,10)}</td>
-                    <td>
-                      <Link className="btn btn-primary mx-2" to={`/admin/products/edit/${product.id}`}>Edit</Link>
-                      <button type="button" className="btn btn-normal btn-error" onClick={() => handleDelete(product.id)}>Delete</button>
-                    </td>
-                  </tr>
-                ))
-              }
+            {products.map((product, index) => (
+              <tr key={index} className="">
+                <th>{product.id}</th>
+                <td>{product.name}</td>
+                <td>{product.brand}</td>
+                <td>{product.category}</td>
+                <td>{product.price}$</td>
+                <td>
+                  <img
+                    src={`http://localhost:4000/images/${product.imageFilename}`}
+                    width={100}
+                    alt="produit"
+                  />
+                </td>
+                <td>{product.createdAt.slice(0, 10)}</td>
+                <td>
+                  <Link
+                    className="btn btn-primary mx-2"
+                    to={`/admin/products/edit/${product.id}`}
+                  >
+                    Edit
+                  </Link>
+                  <button
+                    type="button"
+                    className="btn btn-normal btn-error"
+                    onClick={() => handleDelete(product.id)}
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
+
+        <div className="join">{paginationButtons}</div>
       </div>
     </div>
   );
