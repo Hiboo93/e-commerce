@@ -1,6 +1,11 @@
 import { Link } from "react-router-dom"
+import { ProductsType } from "../../types.ts"
 
-const ProductItem = ({ product }) => {
+type PropsType = {
+  product: ProductsType
+}
+
+const ProductItem = ({ product }: PropsType) => {
   return (
     <div className="rounded border shadow-lg p-4 h-auto w-[220px] text-center mx-auto ">
       <img src={`http://localhost:4000/images/${product.imageFilename}`} alt="device"  className="object-contain h-48 w-96 my-5"/>
@@ -8,7 +13,7 @@ const ProductItem = ({ product }) => {
       <h4 className="my-3">{product.name}</h4>
       <p>
         Brand: {product.brand}, Category: {product.category} <br />
-        {product.description.substr(0, 50) + "..."}
+        {product.description ? product.description.slice(0, 50) + "..." : "No description available"}
       </p>
       <h4 className="my-3">{product.price}$</h4>
       <Link role="button" className="btn btn-sm btn-primary" to={`/products/${product.id}`}>Details</Link>

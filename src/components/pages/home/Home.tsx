@@ -1,16 +1,27 @@
 import { useEffect, useState } from "react"
 import ProductItem from "../../product/ProductItem.tsx"
+import { ProductsType } from "../../../types.ts";
+import { Link } from "react-router-dom";
 
 function Home() {
-  const [ products, setProducts ] = useState([])
+  const [ products, setProducts ] = useState<ProductsType[]>([])
+
+  // pagination functionality
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const pageSize = 5;
 
   const getProducts = async () => {
-    let url = `http://localhost:4000/products?_sort=id&_order=desc`;
+    let url = `http://localhost:4000/products?_sort=id&_order=desc&_page=${currentPage}&_limit=${pageSize}`;
 
     try {
       let response = await fetch(url);
       let productsData = await response.json();
       if (response.ok) {
+        let totalCount = response.headers.get("X-Total-Count");
+        let pages: number | null = Math.ceil(totalCount / pageSize);
+        // console.log("Total Pages:" + pages);
+        setTotalPages(pages);
         setProducts(productsData);
       }
     } catch (error) {
@@ -20,7 +31,22 @@ function Home() {
 
   useEffect(() => {
     getProducts()
-  },[])
+  },[currentPage])
+
+  // pagination functionality
+  let paginationButtons = [];
+  for (let i = 1; i <= totalPages; i++) {
+    paginationButtons.push(
+        <Link className={
+          i === currentPage ? "join-item btn btn-active" : "join-item btn"
+        }
+        key={i} to={`?page=${i}`} onClick={event => {
+          event.preventDefault()
+
+          setCurrentPage(i)
+        }}>{i}</Link>
+    );
+  }
 
   return (
     <div className="h-auto">
@@ -90,6 +116,7 @@ function Home() {
           </div>
         </div>
       </div>
+      <div className="join ml-12">{paginationButtons}</div>
     </div>
   )
 }
