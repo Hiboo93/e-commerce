@@ -1,7 +1,27 @@
+import { useEffect, useState } from "react"
 import ProductItem from "../../product/ProductItem.tsx"
 
 function Home() {
-  
+  const [ products, setProducts ] = useState([])
+
+  const getProducts = async () => {
+    let url = `http://localhost:4000/products?_sort=id&_order=desc`;
+
+    try {
+      let response = await fetch(url);
+      let productsData = await response.json();
+      if (response.ok) {
+        setProducts(productsData);
+      }
+    } catch (error) {
+      alert("Unable to get the data");
+    }
+  };
+
+  useEffect(() => {
+    getProducts()
+  },[])
+
   return (
     <div className="h-auto">
       <div className=" bg-blue-600 min-h-[200px]">
@@ -58,19 +78,14 @@ function Home() {
           </div>
 
           <div>
-            <div className="mt-8">
-              <ProductItem product={
-                {
-                "id": 1,
-                "name": "MSI Pulse Pro",
-                "brand": "MSI",
-                "category": "Computers",
-                "price": 1099,
-                "description": "MSI Pulse GL66 15.6\" FHD 144Hz Gaming Laptop: Intel Core i7-12700H RTX 3070 16GB 512GB NVMe SSD",
-                "imageFilename": "22866337.jpg",
-                "createdAt": "2023-07-13T17:46:54.8900000"
-                }
-              }/>
+            <div className="mt-8 grid grid-cols-2 md:grid-cols-3 gap-5 lg:grid-cols-4 xl:grid-cols-5">
+              {
+                products.map((product, index) => (
+                  <div key={index}>
+                    <ProductItem product={product}/>
+                  </div>
+                ))
+              }
             </div>
           </div>
         </div>
