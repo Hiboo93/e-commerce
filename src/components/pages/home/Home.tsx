@@ -11,12 +11,24 @@ function Home() {
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 5;
 
+  // filter functionality
+  const [ filterParams, setFilterParams ] = useState({brand: "", category: ""})
+
   const getProducts = async () => {
     let url = `http://localhost:4000/products?_sort=id&_order=desc&_page=${currentPage}&_limit=${pageSize}`;
+    
+    if (filterParams.brand) {
+      url = `${url}&brand=${filterParams.brand}`
+    }
+    if (filterParams.category) {
+      url = `${url}&category=${filterParams.category}`
+    }
 
     try {
       let response = await fetch(url);
       let productsData = await response.json();
+      console.log(products);
+      
       if (response.ok) {
         let totalCount = response.headers.get("X-Total-Count");
         let pages: number | null = Math.ceil(totalCount / pageSize);
@@ -31,7 +43,7 @@ function Home() {
 
   useEffect(() => {
     getProducts()
-  },[currentPage])
+  },[currentPage, filterParams])
 
   // pagination functionality
   let paginationButtons = [];
@@ -46,6 +58,17 @@ function Home() {
           setCurrentPage(i)
         }}>{i}</Link>
     );
+  }
+
+  // filter functionality
+  const handleBrandFilter = (event: React.ChangeEvent<HTMLSelectElement>) => { 
+      let brand = event.target.value
+      setFilterParams({ ...filterParams, brand: brand })
+   }
+
+  const handleCategoryFilter = (event: React.ChangeEvent<HTMLSelectElement>) => { 
+    let category = event.target.value
+    setFilterParams({ ...filterParams, category: category })
   }
 
   return (
@@ -71,26 +94,26 @@ function Home() {
               <h4 className="text-2xl">Products</h4>
             </div>
             <div className="my-2">
-              <select className="select select-bordered w-full max-w-xs">
+              <select className="select select-bordered w-full max-w-xs" onChange={handleBrandFilter}>
                 <option disabled selected>All Brands</option>
                 <option value="">All Brands</option>
-                <option value="samsung">Samsung</option>
-                <option value="apple">Apple</option>
-                <option value="nokia">Nokia</option>
-                <option value="hp">Hp</option>
+                <option value="Samsung">Samsung</option>
+                <option value="Apple">Apple</option>
+                <option value="Nokia">Nokia</option>
+                <option value="HP">Hp</option>
               </select>
             </div>
 
             <div className="my-2">
-              <select className="select select-bordered w-full max-w-xs">
+              <select className="select select-bordered w-full max-w-xs" onChange={handleCategoryFilter}>
                 <option disabled selected>All Categories</option>
                 <option value="">All Categories</option>
-                <option value="phone">Phone</option>
-                <option value="computer">Computers</option>
-                <option value="accessories">Accessories</option>
-                <option value="printers">Printers</option>
-                <option value="cameras">Cameras</option>
-                <option value="other">Other</option>
+                <option value="Phones">Phone</option>
+                <option value="Computers">Computers</option>
+                <option value="Accessories">Accessories</option>
+                <option value="Printers">Printers</option>
+                <option value="Cameras">Cameras</option>
+                <option value="Other">Other</option>
               </select>
             </div>
             <div className="my-2">
