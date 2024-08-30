@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { ValidationErrorsType } from "../../../../types.ts";
+import { ProductsType, ValidationErrorsType } from "../../../../types.ts";
 
 
 function EditProduct() {
-  const { id } = useParams<{ id: string }>()
+  const { id } = useParams<{id: string}>()
 
-  const [ initialData, setInitialData ] = useState()
+  const [ initialData, setInitialData ] = useState<ProductsType>()
   const [validationErrors, setValidationErrors] = useState<ValidationErrorsType>({});
+  
   const navigate = useNavigate();
 
   async function getProduct() {
@@ -25,7 +26,6 @@ function EditProduct() {
   useEffect(() => {
     getProduct()
   }, [])
-  
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -113,6 +113,7 @@ function EditProduct() {
                     className="grow"
                     placeholder=""
                     name="brand"
+                    defaultValue={initialData.brand}
                     required
                   />
                   <span className="text-error">{validationErrors.brand}</span>
@@ -124,6 +125,7 @@ function EditProduct() {
                   className="select select-bordered w-full max-w-xs"
                   name="category"
                   defaultValue={initialData.category}
+                  aria-label="Product Category"
                 >
                   <option disabled selected>
                     Category
@@ -140,7 +142,6 @@ function EditProduct() {
 
               <div>
                 <label className="input input-bordered flex items-center gap-2">
-                  Price
                   <input
                     type="number"
                     className="grow"
@@ -177,6 +178,7 @@ function EditProduct() {
 
               <div>
                 <input
+                  id="product-price"
                   type="file"
                   className="file-input file-input-bordered w-full max-w-xs"
                   name="image"
