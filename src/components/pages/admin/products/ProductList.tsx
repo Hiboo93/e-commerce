@@ -5,16 +5,20 @@ import { ProductsType } from "../../../../types.ts";
 function ProductList() {
   const [products, setProducts] = useState<ProductsType[]>([]);
 
+   // pagination functionality
+   const [currentPage, setCurrentPage] = useState(1);
+   const [totalPages, setTotalPages] = useState(1);
+   const pageSize = 5;
+
    // search functionality
    const [ search, setSearch ] = useState("")
 
-  // pagination functionality
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const pageSize = 5;
+   // sort functionality
+   const [ sortColumn, setSortColumn ] = useState({column: "id", orderBy: "desc"})
 
+ 
   const getProducts = async () => {
-    let url = `http://localhost:4000/products?_sort=id&_order=desc&_page=${currentPage}&_limit=${pageSize}&q=${search}`;
+    let url = `http://localhost:4000/products?_page=${currentPage}&_limit=${pageSize}&q=${search}&_sort=${sortColumn.column}&_order=${sortColumn.orderBy}`;
 
     try {
       let response = await fetch(url);
@@ -33,7 +37,7 @@ function ProductList() {
 
   useEffect(() => {
     getProducts();
-  }, [currentPage, search]);
+  }, [currentPage, search, sortColumn]);
 
   const handleDelete = async (id: ProductsType) => {
     try {
@@ -48,7 +52,6 @@ function ProductList() {
     }
   };
 
- 
 
   // pagination functionality
   let paginationButtons = [];
@@ -65,6 +68,8 @@ function ProductList() {
     );
   }
 
+
+  // search functionality
   const handleSearch = (event: React.FormEvent<HTMLFormElement>) => { 
     event.preventDefault()
 
@@ -73,6 +78,24 @@ function ProductList() {
     setSearch(text)
     setCurrentPage(1)
    }
+
+
+   // sort functionality
+   const sortTable = (column) => { 
+      let orderBy = "desc"
+
+      if (column === sortColumn.column) {
+        // reverse orderBy
+        if (sortColumn.orderBy === "asc") {
+          orderBy = "desc"
+        }else {
+          orderBy = "asc"
+        }
+      }
+
+      setSortColumn({column: column, orderBy: orderBy})
+    }
+
 
   return (
     <div className="container my-4">
@@ -110,13 +133,13 @@ function ProductList() {
           {/* head */}
           <thead>
             <tr className="text-black">
-              <th>ID</th>
-              <th>Name</th>
-              <th>Brand</th>
-              <th>Category</th>
-              <th>Price</th>
-              <th>Image</th>
-              <th>Created At</th>
+              <th style={{ cursor: "pointer" }} onClick={() => sortTable("id")}>ID</th>
+              <th style={{ cursor: "pointer" }} onClick={() => sortTable("name")}>Name</th>
+              <th style={{ cursor: "pointer" }} onClick={() => sortTable("brand")}>Brand</th>
+              <th style={{ cursor: "pointer" }} onClick={() => sortTable("category")}>Category</th>
+              <th style={{ cursor: "pointer" }} onClick={() => sortTable("price")}>Price</th>
+              <th style={{ cursor: "pointer" }} onClick={() => sortTable("image")}>Image</th>
+              <th style={{ cursor: "pointer" }} onClick={() => sortTable("createdAt")}>Created At</th>
               <th>Action</th>
             </tr>
           </thead>
