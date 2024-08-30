@@ -138,7 +138,7 @@ function ProductList() {
               <th style={{ cursor: "pointer" }} onClick={() => sortTable("brand")}>Brand</th>
               <th style={{ cursor: "pointer" }} onClick={() => sortTable("category")}>Category</th>
               <th style={{ cursor: "pointer" }} onClick={() => sortTable("price")}>Price</th>
-              <th style={{ cursor: "pointer" }} onClick={() => sortTable("image")}>Image</th>
+              <th>Image</th>
               <th style={{ cursor: "pointer" }} onClick={() => sortTable("createdAt")}>Created At</th>
               <th>Action</th>
             </tr>
@@ -186,3 +186,4 @@ function ProductList() {
 }
 
 export default ProductList;
+
