@@ -14,8 +14,12 @@ function Home() {
   // filter functionality
   const [ filterParams, setFilterParams ] = useState({brand: "", category: ""})
 
+  // sort functionality
+  const [ sortColumn, setSortColumn ] = useState({column: "id", orderBy: "desc"})
+
+
   const getProducts = async () => {
-    let url = `http://localhost:4000/products?_sort=id&_order=desc&_page=${currentPage}&_limit=${pageSize}`;
+    let url = `http://localhost:4000/products?_page=${currentPage}&_limit=${pageSize}`;
     
     if (filterParams.brand) {
       url = `${url}&brand=${filterParams.brand}`
@@ -23,6 +27,7 @@ function Home() {
     if (filterParams.category) {
       url = `${url}&category=${filterParams.category}`
     }
+    url = `${url}&_sort=${sortColumn.column}&_order=${sortColumn.orderBy}`
 
     try {
       let response = await fetch(url);
@@ -43,7 +48,7 @@ function Home() {
 
   useEffect(() => {
     getProducts()
-  },[currentPage, filterParams])
+  },[currentPage, filterParams, sortColumn])
 
   // pagination functionality
   let paginationButtons = [];
@@ -64,12 +69,27 @@ function Home() {
   const handleBrandFilter = (event: React.ChangeEvent<HTMLSelectElement>) => { 
       let brand = event.target.value
       setFilterParams({ ...filterParams, brand: brand })
+      setCurrentPage(1)
    }
 
   const handleCategoryFilter = (event: React.ChangeEvent<HTMLSelectElement>) => { 
     let category = event.target.value
     setFilterParams({ ...filterParams, category: category })
+    setCurrentPage(1)
   }
+
+  //sort functionality
+  const handleSort = (event) => {
+    let val = event.target.value
+
+    if (val === "0") {
+      setSortColumn({column: "id", orderBy: "desc"})
+    }else if(val === "1") {
+      setSortColumn({column: "price", orderBy: "asc"})
+    }else if(val === "2") {
+      setSortColumn({column: "price", orderBy: "desc"})
+    }
+   }
 
   return (
     <div className="h-auto">
@@ -117,7 +137,7 @@ function Home() {
               </select>
             </div>
             <div className="my-2">
-              <select className="select select-bordered w-full max-w-xs">
+              <select className="select select-bordered w-full max-w-xs" onChange={handleSort}>
                 <option disabled selected>Order By Newest</option>
                 <option value="0">Order By Newest</option>
                 <option value="1">Price: Low to High</option>
