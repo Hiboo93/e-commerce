@@ -32,14 +32,15 @@ function Home() {
     try {
       let response = await fetch(url);
       let productsData = await response.json();
-      console.log(products);
       
       if (response.ok) {
         let totalCount = response.headers.get("X-Total-Count");
-        let pages: number | null = Math.ceil(totalCount / pageSize);
-        // console.log("Total Pages:" + pages);
-        setTotalPages(pages);
-        setProducts(productsData);
+        if (totalCount) {
+          const totalItems = parseInt(totalCount, 10);
+          let pages: number = Math.ceil(totalItems / pageSize);
+          setTotalPages(pages);
+          setProducts(productsData);
+        }
       }
     } catch (error) {
       alert("Unable to get the data");
@@ -79,7 +80,7 @@ function Home() {
   }
 
   //sort functionality
-  const handleSort = (event) => {
+  const handleSort = (event: React.ChangeEvent<HTMLSelectElement>) => {
     let val = event.target.value
 
     if (val === "0") {

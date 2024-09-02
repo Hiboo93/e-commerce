@@ -25,10 +25,12 @@ function ProductList() {
       let productsData = await response.json();
       if (response.ok) {
         let totalCount = response.headers.get("X-Total-Count");
-        let pages: number | null = Math.ceil(totalCount / pageSize);
-        // console.log("Total Pages:" + pages);
-        setTotalPages(pages);
-        setProducts(productsData);
+        if (totalCount) {
+          const totalItems = parseInt(totalCount, 10);
+          let pages: number = Math.ceil(totalItems / pageSize);
+          setTotalPages(pages);
+          setProducts(productsData);
+        }
       }
     } catch (error) {
       alert("Unable to get the data");
@@ -39,7 +41,7 @@ function ProductList() {
     getProducts();
   }, [currentPage, search, sortColumn]);
 
-  const handleDelete = async (id: ProductsType) => {
+  const handleDelete = async (id: number) => {
     try {
       const response = await fetch(`http://localhost:4000/products/${id}`, {
         method: "DELETE",
@@ -81,7 +83,7 @@ function ProductList() {
 
 
    // sort functionality
-   const sortTable = (column) => { 
+   const sortTable = (column: string) => { 
       let orderBy = "desc"
 
       if (column === sortColumn.column) {
@@ -133,13 +135,13 @@ function ProductList() {
           {/* head */}
           <thead>
             <tr className="text-black">
-              <th style={{ cursor: "pointer" }} onClick={() => sortTable("id")}>ID</th>
-              <th style={{ cursor: "pointer" }} onClick={() => sortTable("name")}>Name</th>
-              <th style={{ cursor: "pointer" }} onClick={() => sortTable("brand")}>Brand</th>
-              <th style={{ cursor: "pointer" }} onClick={() => sortTable("category")}>Category</th>
-              <th style={{ cursor: "pointer" }} onClick={() => sortTable("price")}>Price</th>
+              <th className="cursor-pointer" onClick={() => sortTable("id")}>ID</th>
+              <th className="cursor-pointer" onClick={() => sortTable("name")}>Name</th>
+              <th className="cursor-pointer" onClick={() => sortTable("brand")}>Brand</th>
+              <th className="cursor-pointer" onClick={() => sortTable("category")}>Category</th>
+              <th className="cursor-pointer" onClick={() => sortTable("price")}>Price</th>
               <th>Image</th>
-              <th style={{ cursor: "pointer" }} onClick={() => sortTable("createdAt")}>Created At</th>
+              <th className="cursor-pointer" onClick={() => sortTable("createdAt")}>Created At</th>
               <th>Action</th>
             </tr>
           </thead>
