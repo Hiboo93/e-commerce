@@ -24,7 +24,9 @@ function App() {
           <Route path="/admin/products/edit/:id" element={<EditProduct/>}/>
           <Route path="*" element={<ErrorPage/>}/>
         </Routes>
-        <Footer/>
+        <div className="static bottom-0 left-0 right-0">
+          <Footer/>
+        </div>
       </BrowserRouter>
     </div>
   )

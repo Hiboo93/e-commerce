@@ -34,7 +34,7 @@ function ProductDetails() {
         </div>
         <div className="text-3xl ">
           <h3 className="mb-3">{product.name}</h3>
-          <h3 className="mb-3">{product.price}</h3>
+          <h3 className="mb-3">{product.price}$</h3>
           <button type="button" className="btn btn-sm btn-warning mb-4">
             Add to Cart <BsCart4 />
           </button>

@@ -130,19 +130,19 @@ function ProductList() {
         </div>
       </div>
 
-      <div className="overflow-x-auto mx-4 container">
-        <table className="table">
+      <div className="overflow-x-auto mx-4 container ">
+        <table className="table border-separate text-center">
           {/* head */}
           <thead>
             <tr className="text-black">
-              <th className="cursor-pointer" onClick={() => sortTable("id")}>ID</th>
-              <th className="cursor-pointer" onClick={() => sortTable("name")}>Name</th>
-              <th className="cursor-pointer" onClick={() => sortTable("brand")}>Brand</th>
-              <th className="cursor-pointer" onClick={() => sortTable("category")}>Category</th>
-              <th className="cursor-pointer" onClick={() => sortTable("price")}>Price</th>
-              <th>Image</th>
-              <th className="cursor-pointer" onClick={() => sortTable("createdAt")}>Created At</th>
-              <th>Action</th>
+              <th className="cursor-pointer border border-slate-600" onClick={() => sortTable("id")}>ID</th>
+              <th className="cursor-pointer border border-slate-600" onClick={() => sortTable("name")}>Name</th>
+              <th className="cursor-pointer border border-slate-600" onClick={() => sortTable("brand")}>Brand</th>
+              <th className="cursor-pointer border border-slate-600" onClick={() => sortTable("category")}>Category</th>
+              <th className="cursor-pointer border border-slate-600" onClick={() => sortTable("price")}>Price</th>
+              <th className="border border-slate-600">Image</th>
+              <th className="cursor-pointer border border-slate-600" onClick={() => sortTable("createdAt")}>Created At</th>
+              <th >Action</th>
             </tr>
           </thead>
           <tbody>
@@ -181,7 +181,7 @@ function ProductList() {
             ))}
           </tbody>
         </table>
-        <div className="join">{paginationButtons}</div>
+        <div className="join my-3">{paginationButtons}</div>
       </div>
     </div>
   );
