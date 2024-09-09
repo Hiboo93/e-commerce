@@ -8,6 +8,8 @@ import ProductList from "./components/pages/admin/products/ProductList.tsx"
 import CreateProduct from "./components/pages/admin/products/CreateProduct.tsx"
 import EditProduct from "./components/pages/admin/products/EditProduct.tsx"
 import ProductDetails from "./components/pages/admin/products/ProductDetails.tsx"
+import Register from "./components/pages/auth/Register.tsx"
+import Login from "./components/pages/auth/Login.tsx"
 
 function App() {
 
@@ -19,6 +21,10 @@ function App() {
           <Route path="/" element={<Home/>}/>
           <Route path="/contact" element={<Contact/>}/>
           <Route path="/products/:id" element={<ProductDetails/>}/>
+
+          <Route path="/auth/register" element={<Register/>}/>
+          <Route path="/auth/login" element={<Login/>}/>
+          
           <Route path="/admin/products" element={<ProductList/>}/>
           <Route path="/admin/products/create" element={<CreateProduct/>}/>
           <Route path="/admin/products/edit/:id" element={<EditProduct/>}/>

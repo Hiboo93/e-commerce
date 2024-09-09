@@ -60,6 +60,15 @@ const Navbar = () => {
           </li>
         </ul>
       </div>
+
+      <ul>
+        <li className="mx-1">
+          <Link to={"/auth/register"} className="btn btn-sm btn-outline btn-primary" role="button">Register</Link>
+        </li>
+        <li className="mx-1">
+          <Link to={"/auth/login"} className="btn btn-sm btn-primary" role="button">Login</Link>
+        </li>
+      </ul>
     </div>
   );
 };
