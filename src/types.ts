@@ -17,3 +17,13 @@ export type ValidationErrorsType = {
   description?: string;
   image?: string;
 }
+
+export type UserCredentialsType = {
+  firstName?: string;
+  email?: string;
+}
+
+export type AppContextType = {
+  userCredentials: UserCredentialsType;
+  setUserCredentials: React.Dispatch<React.SetStateAction<UserCredentialsType>>;
+}

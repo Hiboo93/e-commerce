@@ -3,10 +3,16 @@ import { FaUser } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { FaKey } from "react-icons/fa";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { useAppContext } from "../../../AppContext.tsx";
 
 function Register() {
   const navigate = useNavigate()
+  const {userCredentials, setUserCredentials} = useAppContext()
+
+  if (userCredentials) {
+    return <Navigate to="/" />
+  }
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => { 
     event.preventDefault()
@@ -40,16 +46,15 @@ function Register() {
 
       if (response.ok) {
         console.log("server response: ", data);
+        setUserCredentials(data)
         navigate("/")
       }else {
         alert("Unable to register: " + data)
       }
-      
     } catch (error) {
       alert("Unable to connect to the server")
     }
    }
-
   return (
     <div className="h-screen">
       <div className="container mx-auto h-full  flex justify-center items-center ">
