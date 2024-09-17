@@ -1,9 +1,13 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ValidationErrorsType } from "../../../../types.ts";
+import { defaultCredentials, useAppContext } from "../../../../AppContext.tsx";
 
 function CreateProduct() {
   const [ validationErrors, setValidationErrors ] = useState<ValidationErrorsType>({})
+
+  const { userCredentials, setUserCredentials } = useAppContext()
+
   const navigate = useNavigate()
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => { 
@@ -13,7 +17,7 @@ function CreateProduct() {
     const formData = new FormData(formElement)
     const product = Object.fromEntries(formData.entries())
     
-    if (!product.name || !product.brand || !product.category || !product.price || !product.description || !product.image.name) {
+    if (!product.name || !product.brand || !product.category || !product.price || !product.description || !(product.image instanceof File)) {
       alert("Please fill all the fields")
       return
     }
@@ -21,6 +25,9 @@ function CreateProduct() {
     try {
       const response = await fetch("http://localhost:4000/products", {
         method: "POST",
+        headers: {
+          "Authorization": "Bearer " + userCredentials.user.accessToken
+        },
         body: formData,
       })
 
@@ -31,6 +38,9 @@ function CreateProduct() {
       }
       else if (response.status === 400) {
         setValidationErrors(data)
+      }
+      else if (response.status === 401) {
+        setUserCredentials(defaultCredentials)
       }
       else {
         alert("Unable to create the product!")

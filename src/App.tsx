@@ -11,12 +11,14 @@ import ProductDetails from "./components/pages/admin/products/ProductDetails.tsx
 import Register from "./components/pages/auth/Register.tsx";
 import Login from "./components/pages/auth/Login.tsx";
 import { AppContextProvider } from "./AppContext.tsx";
+import { AdminRoute } from "./components/authorization/Authorization.tsx";
+
 
 function App() {
   
 
   return (
-    <div className="h-full bg-slate-100 container mx-auto">
+    <div className="h-full min-w-[560px] bg-slate-100 container mx-auto ">
       <AppContextProvider>
         <BrowserRouter>
           <Navbar />
@@ -28,9 +30,9 @@ function App() {
             <Route path="/auth/register" element={<Register />} />
             <Route path="/auth/login" element={<Login />} />
 
-            <Route path="/admin/products" element={<ProductList />} />
-            <Route path="/admin/products/create" element={<CreateProduct />} />
-            <Route path="/admin/products/edit/:id" element={<EditProduct />} />
+            <Route path="/admin/products" element={<AdminRoute><ProductList /></AdminRoute>} />
+            <Route path="/admin/products/create" element={<AdminRoute><CreateProduct /></AdminRoute>} />
+            <Route path="/admin/products/edit/:id" element={<AdminRoute><EditProduct /></AdminRoute>} />
             <Route path="*" element={<ErrorPage />} />
           </Routes>
           <div className="static bottom-0 left-0 right-0">
