@@ -2,12 +2,15 @@ import { MdEmail } from "react-icons/md";
 import { FaKey } from "react-icons/fa";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useAppContext } from "../../../AppContext.tsx";
+import { UserCredentialsType} from "../../../types.ts";
 
 function Login() {
   const navigate = useNavigate()
-  const { userCredentials, setUserCredentials} = useAppContext()
+  const { userCredentials, setUserCredentials, setIsConnected} = useAppContext()
 
-  if (userCredentials) {
+  if ("user" in userCredentials &&
+    userCredentials.user.email &&
+    userCredentials.user.password) {
     return <Navigate to="/" />
   }
 
@@ -23,6 +26,7 @@ function Login() {
     }
 
     const credentials = {email, password}
+    
     try {
       const response = await fetch("http://localhost:4000/login", {
         method: "POST",
@@ -35,8 +39,15 @@ function Login() {
       const data = await response.json()
 
       if (response.ok) {
-        console.log("server response: ", data);
-        setUserCredentials(data)
+        const userData: UserCredentialsType = {
+          user: {
+            ...data.user,  // On copie les propriétés de user
+            accessToken: data.accessToken  // On ajoute l'accessToken ici
+          }
+        };
+        
+        setUserCredentials(userData)
+        setIsConnected(true)
         navigate("/")
       }else {
         alert("Unable to login: " + data)

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { ProductsType, ValidationErrorsType } from "../../../../types.ts";
+import { useAppContext } from "../../../../AppContext.tsx";
 
 
 function EditProduct() {
@@ -8,6 +9,8 @@ function EditProduct() {
 
   const [ initialData, setInitialData ] = useState<ProductsType>()
   const [validationErrors, setValidationErrors] = useState<ValidationErrorsType>({});
+
+  const {userCredentials} = useAppContext()
   
   const navigate = useNavigate();
 
@@ -48,6 +51,9 @@ function EditProduct() {
     try {
       const response = await fetch(`http://localhost:4000/products/${id}`, {
         method: "PATCH",
+        headers: {
+          "Authorization": "Bearer " + userCredentials.user.accessToken
+        },
         body: formData,
       });
 

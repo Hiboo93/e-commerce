@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ProductsType } from "../../../../types.ts";
+import { defaultCredentials, useAppContext } from "../../../../AppContext.tsx";
 
 function ProductList() {
   const [products, setProducts] = useState<ProductsType[]>([]);
+  const { userCredentials, setUserCredentials} = useAppContext()
+  const navigate = useNavigate()
 
    // pagination functionality
    const [currentPage, setCurrentPage] = useState(1);
@@ -45,9 +48,15 @@ function ProductList() {
     try {
       const response = await fetch(`http://localhost:4000/products/${id}`, {
         method: "DELETE",
+        headers: {
+          "Authorization": "Bearer " + userCredentials.user.accessToken
+        }
       });
       if (response.ok) {
         getProducts();
+      }else if (response.status === 401){
+        setUserCredentials(defaultCredentials)
+        navigate("/auth/login")
       }
     } catch (error) {
       alert("Unable to delete the product");
@@ -80,7 +89,6 @@ function ProductList() {
     setSearch(text)
     setCurrentPage(1)
    }
-
 
    // sort functionality
    const sortTable = (column: string) => { 

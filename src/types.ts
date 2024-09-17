@@ -1,5 +1,5 @@
 export type ProductsType = {
-  id?: string;
+  id: number;
   name: string;
   brand: string;
   category: string;
@@ -18,12 +18,25 @@ export type ValidationErrorsType = {
   image?: string;
 }
 
-export type UserCredentialsType = {
+export type UserType = {
   firstName?: string;
   email?: string;
+  phone?: string;
+  address?: string;
+  password?: string;
+  role?: string;
+  accessToken?: string;
 }
+
+export type UserCredentialsType = {
+  user: UserType;
+};
 
 export type AppContextType = {
   userCredentials: UserCredentialsType;
   setUserCredentials: React.Dispatch<React.SetStateAction<UserCredentialsType>>;
+  setIsConnected: React.Dispatch<React.SetStateAction<boolean>>
+  isConnected: boolean;
 }
+
+

@@ -1,27 +1,66 @@
-import { createContext, ReactNode, useContext } from "react"
+import { createContext, ReactNode, useContext, useEffect } from "react";
 import { useState } from "react";
 import { AppContextType, UserCredentialsType } from "./types.ts";
 
+export type ChildrenType = {
+  children: ReactNode;
+};
 
-export type childrenType = {
-  children : ReactNode
-}
+export const defaultCredentials: UserCredentialsType = {
+  user: {
+    firstName: '',
+    email: '',
+    password: '',
+    phone: '',
+    address: '',
+    role: '',
+    accessToken: ""
+  }
+};
 
-const appContext = createContext<AppContextType>({
-  userCredentials : {},
-  setUserCredentials : ()=>{},
-})
+const AppContext = createContext<AppContextType>({
+  userCredentials: defaultCredentials,
+  setUserCredentials: () => {},
+  setIsConnected: () => {},
+  isConnected: false,
+});
 
-export const AppContextProvider = ({ children }: childrenType) => {
-  const [userCredentials, setUserCredentials] = useState<UserCredentialsType>({});
+export const AppContextProvider = ({ children }: ChildrenType) => {
+  const [userCredentials, setUserCredentials] = useState<UserCredentialsType>(
+    getStoredCredentials() || defaultCredentials
+  );
+  
+  const [isConnected, setIsConnected] = useState<boolean>(false);
+
+  // Fonction pour récupérer les credentials stockés dans localStorage
+  function getStoredCredentials(): UserCredentialsType | null {
+    let data = localStorage.getItem("credentials");
+    if (data) {
+      let json = JSON.parse(data);
+      return json as UserCredentialsType;
+    }
+    return null;
+  }
+
+  // useEffect pour stocker les credentials au montage du composant
+  useEffect(() => {
+    if (userCredentials && userCredentials.user.email) {
+      localStorage.setItem("credentials", JSON.stringify(userCredentials));
+    }
+  }, [userCredentials]);
 
   return (
-    <appContext.Provider value={{ userCredentials, setUserCredentials }}>
+    <AppContext.Provider
+      value={{
+        userCredentials,
+        setUserCredentials,
+        isConnected,
+        setIsConnected,
+      }}
+    >
       {children}
-    </appContext.Provider>
-  )
-}
+    </AppContext.Provider>
+  );
+};
 
-
-
-export const useAppContext = () => useContext(appContext)
+export const useAppContext = () => useContext(AppContext);

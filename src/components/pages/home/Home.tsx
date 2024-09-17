@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 function Home() {
   const [ products, setProducts ] = useState<ProductsType[]>([])
 
+
   // pagination functionality
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
