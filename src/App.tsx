@@ -11,7 +11,8 @@ import ProductDetails from "./components/pages/admin/products/ProductDetails.tsx
 import Register from "./components/pages/auth/Register.tsx";
 import Login from "./components/pages/auth/Login.tsx";
 import { AppContextProvider } from "./AppContext.tsx";
-import { AdminRoute } from "./components/authorization/Authorization.tsx";
+import { AdminRoute, AuthenticationUserRoute } from "./components/authorization/Authorization.tsx";
+import UserProfile from "./components/pages/userProfile/UserProfile.tsx";
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/products/:id" element={<ProductDetails />} />
+            <Route path="/profile" element={<AuthenticationUserRoute><UserProfile/></AuthenticationUserRoute>} />
 
             <Route path="/auth/register" element={<Register />} />
             <Route path="/auth/login" element={<Login />} />

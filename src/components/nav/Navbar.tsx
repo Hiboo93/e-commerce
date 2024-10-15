@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { NAVLINKCLIENT, NAVLINKS, NAVLINKSADMIN } from "../../constants.ts";
 import { useAppContext } from "../../AppContext.tsx";
 
@@ -11,6 +11,8 @@ const Navbar = () => {
     setIsConnected,
     userCredentials,
   } = useAppContext();
+
+  const navigate = useNavigate()
 
 
   // const { user } = userCredentials
@@ -30,6 +32,7 @@ const Navbar = () => {
   const handleDisconnect = () => {
     localStorage.removeItem("credentials");
     setIsConnected(false);
+    navigate("/")
   };
 
   return (
