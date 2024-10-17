@@ -14,6 +14,7 @@ import { AppContextProvider } from "./AppContext.tsx";
 import { AdminRoute, AuthenticationUserRoute } from "./components/authorization/Authorization.tsx";
 import UserProfile from "./components/pages/userProfile/UserProfile.tsx";
 import UserList from './components/pages/users/UserList.tsx';
+import UserDetails from "./components/pages/users/UserDetails.tsx";
 
 
 
@@ -39,6 +40,8 @@ function App() {
             <Route path="/admin/products/edit/:id" element={<AdminRoute><EditProduct /></AdminRoute>} />
 
             <Route path="/admin/users" element={<AdminRoute><UserList/></AdminRoute>} />
+            <Route path="/admin/users/details/:id" element={<AdminRoute><UserDetails/></AdminRoute>} />
+
             <Route path="*" element={<ErrorPage />} />
           </Routes>
           <div className="static bottom-0 left-0 right-0">

@@ -9,14 +9,26 @@ function UserList() {
   
   const navigate = useNavigate()
 
+  // pagination functionality
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const pageSize = 5;
+
   async function getUsers() {
     try {
-      const response = await fetch(`http://localhost:4000/users`, {
+      const response = await fetch(`http://localhost:4000/users?_page=${currentPage}&_limit=${pageSize}`, {
         method: "GET",
         headers: {
           Authorization: "Bearer " + userCredentials.user.accessToken
         }
       })
+
+      let totalCount = response.headers.get("X-Total-Count");
+        if (totalCount) {
+          const totalItems = parseInt(totalCount, 10);
+          let pages: number = Math.ceil(totalItems / pageSize);
+          setTotalPages(pages)
+        }
 
       const data = await response.json()
 
@@ -37,8 +49,22 @@ function UserList() {
 
   useEffect(() => {
     getUsers()
-  }, [])
+  }, [currentPage])
   
+  // pagination functionality
+  let paginationButtons = [];
+  for (let i = 1; i <= totalPages; i++) {
+    paginationButtons.push(
+        <Link className={
+          i === currentPage ? "join-item btn btn-active" : "join-item btn"
+        }
+        key={i} to={`?page=${i}`} onClick={event => {
+          event.preventDefault()
+
+          setCurrentPage(i)
+        }}>{i}</Link>
+    );
+  }
 
   return (
     <div className="container mx-auto my-4 p-4">
@@ -111,6 +137,8 @@ function UserList() {
             ))}
           </tbody>
         </table>
+
+        <div className="join my-3">{paginationButtons}</div>
       </div>
     </div>
   );
