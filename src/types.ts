@@ -19,7 +19,7 @@ export type ValidationErrorsType = {
 }
 
 export type UserType = {
-  id?: string;
+  id?: string | number;
   firstName?: string;
   lastName?: string;
   email?: string;

@@ -8,5 +8,6 @@ export const NAVLINKCLIENT = [
 ]
 export const NAVLINKSADMIN = [
   {title : "Products", href : "/admin/products"},
+  {title : "Users", href : "/admin/users"},
   {title : "Profile", href : "/profile"},
 ]
