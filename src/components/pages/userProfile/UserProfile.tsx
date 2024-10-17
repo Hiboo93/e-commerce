@@ -54,6 +54,7 @@ function UserProfile() {
         {action === "update_password" && (
           <div className="mx-auto rounded-sm border p-4 w-[400px]">
             <h2 className="text-center mb-3 text-4xl">Update Password</h2>
+            <UpdatePassword/>
             <div className="my-5 h-[25px]">
               <div className="border-y-2 border-black h-[25px]" />
             </div>
@@ -233,5 +234,80 @@ function UpdateProfiile() {
     </>
   );
 }
+
+function UpdatePassword() {
+  const { userCredentials, setUserCredentials } = useAppContext()
+  const navigate = useNavigate()
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) { 
+    event.preventDefault()
+
+    const formElement = event.target as HTMLFormElement
+
+    const password = formElement.password.value
+    const confirm_password = formElement.confirm_password.value
+
+    if (!password) {
+      alert("Please fill the new Password!")
+      return
+    }
+
+    if (password !== confirm_password) {
+      alert("Password and confirm Password do not match")
+      return
+    }
+
+    const passwordObj = {password}
+
+    try {
+      const response = await fetch(`http://localhost:4000/users/${userCredentials.user.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-type": "application/json",
+          "Authorization": "Bearer " + userCredentials.user.accessToken
+        },
+        body: JSON.stringify(passwordObj)
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        alert("Password Updated correctly !")
+        console.log("server response:", data);
+      }
+      else if (response.status === 401) {
+        setUserCredentials(defaultCredentials)
+        navigate("/auth/login")
+      }
+      else {
+        alert("Unable to update password" + data);
+      }
+    } catch (error) {
+      alert("unable to connect to the server!");
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <div className="mb-3">
+        <label htmlFor="password ">New Password </label>
+        <input type="password" placeholder="Type here" className="input input-bordered w-full max-w-xs" name="password"/>
+      </div>
+
+      <div className="mb-3">
+        <label htmlFor="confirm_password ">Confirm Password </label>
+        <input type="password" placeholder="Type here" className="input input-bordered w-full max-w-xs" name="confirm_password"/>
+      </div>
+
+      <div className="text-end">
+          <button type="submit" className="btn btn-warning">
+            Submit
+          </button>
+        </div>
+    </form>
+  )
+}
+
+
 
 export default UserProfile;
