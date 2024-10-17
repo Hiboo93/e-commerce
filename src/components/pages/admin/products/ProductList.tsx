@@ -156,7 +156,7 @@ function ProductList() {
           <tbody>
             {/* row 1 */}
             {products.map((product, index) => (
-              <tr key={index} className="">
+              <tr key={index} >
                 <th>{product.id}</th>
                 <td>{product.name}</td>
                 <td>{product.brand}</td>

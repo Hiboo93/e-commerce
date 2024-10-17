@@ -133,7 +133,12 @@ function Register() {
             </label>
             <label className="input input-bordered flex items-center gap-2">
               <FaKey />
-              <input type="password" className="grow" name="password" placeholder="Password"/>
+              <input
+                type="password"
+                className="grow"
+                name="password"
+                placeholder="Password"
+              />
             </label>
             <label className="input input-bordered flex items-center gap-2">
               <FaKey />

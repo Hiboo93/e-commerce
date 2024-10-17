@@ -13,6 +13,8 @@ import Login from "./components/pages/auth/Login.tsx";
 import { AppContextProvider } from "./AppContext.tsx";
 import { AdminRoute, AuthenticationUserRoute } from "./components/authorization/Authorization.tsx";
 import UserProfile from "./components/pages/userProfile/UserProfile.tsx";
+import UserList from './components/pages/users/UserList.tsx';
+
 
 
 function App() {
@@ -35,6 +37,8 @@ function App() {
             <Route path="/admin/products" element={<AdminRoute><ProductList /></AdminRoute>} />
             <Route path="/admin/products/create" element={<AdminRoute><CreateProduct /></AdminRoute>} />
             <Route path="/admin/products/edit/:id" element={<AdminRoute><EditProduct /></AdminRoute>} />
+
+            <Route path="/admin/users" element={<AdminRoute><UserList/></AdminRoute>} />
             <Route path="*" element={<ErrorPage />} />
           </Routes>
           <div className="static bottom-0 left-0 right-0">
